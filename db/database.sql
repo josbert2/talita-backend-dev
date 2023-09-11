@@ -23,7 +23,10 @@ SELECT * FROM employee;
 
 CREATE TABLE menus (
   id INT(11) NOT NULL AUTO_INCREMENT,
+  categoria_id INT(11) DEFAULT NULL,
   nombre VARCHAR(100) NOT NULL,
+  descripcion VARCHAR(255) DEFAULT NULL,
+  ingredientes VARCHAR(255) DEFAULT NULL,
   precio DECIMAL(10, 2) DEFAULT NULL,
   precioOferta DECIMAL(10, 2) DEFAULT NULL,
   stock INT(11) DEFAULT NULL,
@@ -42,3 +45,16 @@ VALUES
 ('Tiramisú', 5.99, NULL, 15, 'imagenes/tiramisu.jpg', 'Postre'),
 ('Pasta Carbonara', 10.99, 9.50, 25, 'imagenes/pasta.jpg', 'Plato Principal'),
 ('Jugo de Naranja', 3.50, NULL, 100, 'imagenes/jugo.jpg', 'Bebida');
+
+CREATE TABLE usuarios (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nombre VARCHAR(100) NOT NULL,
+    apellido VARCHAR(100),
+    email VARCHAR(255) UNIQUE NOT NULL,
+    hashedPassword VARCHAR(255) NOT NULL,
+    salt VARCHAR(255) NOT NULL,
+    fecha_creacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    fecha_actualizacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP NOT NULL,
+    rol ENUM('USER', 'ADMIN') DEFAULT 'USER',
+    status ENUM('ACTIVE', 'INACTIVE') DEFAULT 'ACTIVE'
+);

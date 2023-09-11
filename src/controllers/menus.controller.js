@@ -19,9 +19,11 @@ export const getMenus = async (req, res) => {
 };
 
 export const getMenu = async (req, res) => {
+    
     try {
         const { id } = req.params;
-        const [rows] = await pool.query("SELECT * FROM menu WHERE id = ?", [
+    
+        const [rows] = await pool.query("SELECT * FROM menus WHERE id = ?", [
             id,
         ]);
 
