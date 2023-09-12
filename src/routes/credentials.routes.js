@@ -6,6 +6,6 @@ import {
 const router = Router();
 
 // GET all Employees
-router.post("/auth", findUserOneByEmail);
+router.post("/credentials", findUserOneByEmail);
 
 export default router;

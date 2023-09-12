@@ -7,6 +7,7 @@ import indexRoutes from "./routes/index.routes.js";
 import Menus from "./routes/menus.routes.js";
 import User from "./routes/user.routes.js";
 import Credentials from "./routes/credentials.routes.js";
+import Cart from "./routes/cart.routes.js";
 
 const app = express();
 
@@ -22,6 +23,7 @@ app.use("/api", employeesRoutes);
 app.use("/api", Menus);
 app.use("/api", User);
 app.use("/api", Credentials);
+app.use("/api", Cart);
 
 
 app.use((req, res, next) => {

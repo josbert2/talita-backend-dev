@@ -58,3 +58,20 @@ CREATE TABLE usuarios (
     rol ENUM('USER', 'ADMIN') DEFAULT 'USER',
     status ENUM('ACTIVE', 'INACTIVE') DEFAULT 'ACTIVE'
 );
+
+CREATE TABLE menu_carts (
+    cart_id INT AUTO_INCREMENT PRIMARY KEY,
+    usuario_id INT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    FOREIGN KEY (usuario_id) REFERENCES usuarios(id) ON DELETE CASCADE
+);
+
+CREATE TABLE cart_items (
+    cart_item_id INT AUTO_INCREMENT PRIMARY KEY,
+    cart_id INT,
+    menu_id INT,
+    cantidad INT NOT NULL,
+    added_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    FOREIGN KEY (cart_id) REFERENCES menu_carts(cart_id) ON DELETE CASCADE,
+    FOREIGN KEY (menu_id) REFERENCES menus(id) ON DELETE CASCADE
+);
