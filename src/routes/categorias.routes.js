@@ -6,5 +6,6 @@ import {
 const router = Router();
 
 
-router.post("/", createItemCart);
+router.post("/categorias", createCategorias);
 
+export default router;
