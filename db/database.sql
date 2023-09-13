@@ -38,6 +38,8 @@ CREATE TABLE menus (
   PRIMARY KEY(id)
 );
 
+-- Alter table menus add column user_id INT(11) DEFAULT NULL;
+
 INSERT INTO menus 
 (nombre, precio, precioOferta, stock, imagen, tipo)
 VALUES
