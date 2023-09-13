@@ -2,7 +2,7 @@ import { pool } from "../db.js";
 
 
 export const findUserOneByEmail = async (req, res) => {
-
+    
 
     try {
         // get parameter
