@@ -87,3 +87,18 @@ CREATE TABLE cart_items (
     FOREIGN KEY (cart_id) REFERENCES menu_carts(cart_id) ON DELETE CASCADE,
     FOREIGN KEY (menu_id) REFERENCES menus(id) ON DELETE CASCADE
 );
+
+CREATE TABLE ventas (
+    id INT(11) AUTO_INCREMENT PRIMARY KEY,
+    menu_id INT(11) NOT NULL,
+    user_id INT(11) NOT NULL,
+    cantidad INT(11) NOT NULL,
+    precio_total DECIMAL(10, 2) NOT NULL,
+    fecha_venta TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    FOREIGN KEY (menu_id) REFERENCES menus(id),
+    FOREIGN KEY (user_id) REFERENCES usuarios(id)
+);
+
+INSERT INTO ventas (menu_id, user_id, cantidad, precio_total, fecha_venta) VALUES 
+(1, 1, 2, 21.98, '2023-09-14 12:00:00'),
+(2, 2, 3, 26.97, '2023-09-14 12:30:00');
