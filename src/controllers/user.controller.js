@@ -4,16 +4,17 @@ import { pool } from "../db.js";
 export const findUserOneByEmail = async (req, res) => {
     
 
+    
     try {
         // get parameter
         const { email, fullname, hashedPassword , login } = req.query;
-
     
         const [rows] = await pool.query("SELECT * FROM usuarios WHERE email = ? ", [
             email,
         ]);
         if (rows.length <= 0) {
-            const [createUser] = await pool.query("INSERT INTO usuarios (email, hashedPassword) VALUES (?, ?)", [
+            const [createUser] = await pool.query("INSERT INTO usuarios (nombre, email, hashedPassword) VALUES (?, ?, ?)", [
+                fullname,
                 email,
                 hashedPassword
             ]);

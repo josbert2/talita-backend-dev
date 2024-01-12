@@ -57,14 +57,14 @@ export const deleteMenu = async (req, res) => {
 export const createMenu = async (req, res) => {
 
     
-    const { nombre, descripcion, precio, tipo, imagen, user_id, createdAt, updatedAt } = req.body;
+    
+    const { nombre, categoria, descripcion, precio, tipo, imagen, user_id, createdAt, updatedAt } = req.body;
 
-    console.log(nombre, descripcion, precio, tipo, imagen, user_id, createdAt, updatedAt)
 
     try {
         const [rows] = await pool.query(
-            "INSERT INTO menus (nombre, descripcion, precio, tipo, imagen, user_id, createdAt, updatedAt) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
-            [nombre, descripcion, precio, tipo, imagen, user_id, createdAt, updatedAt]
+            "INSERT INTO menus (nombre, categoria_id, descripcion, precio, tipo, imagen, user_id, createdAt, updatedAt) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
+            [nombre, categoria, descripcion, precio, tipo, imagen, user_id, createdAt, createdAt]
         );
         res.status(201).json({ id: rows.insertId, nombre });
     } catch (error) {

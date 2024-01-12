@@ -4,7 +4,7 @@ export const findAllSalesAndPrice = async (req, res) => {
 
     try {
     
-        const [rows] = await pool.query("SELECT MONTH(fecha_venta) AS mes, YEAR(fecha_venta) AS ano, COUNT(*) AS total_registros, SUM(precio_total) AS total_ventas FROM ventas GROUP BY YEAR(fecha_venta), MONTH(fecha_venta) ORDER BY ano DESC, mes DESC;");
+        const [rows] = await pool.query("SELECT MONTH(order_date) AS mes, YEAR(order_date) AS ano, COUNT(*) AS total_registros, SUM(total_price) AS total_ventas FROM orders GROUP BY YEAR(order_date), MONTH(order_date) ORDER BY ano DESC, mes DESC");
         return res.status(201).json(rows[0]);
         
     } catch (error) {

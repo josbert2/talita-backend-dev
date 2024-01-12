@@ -42,6 +42,7 @@ CREATE TABLE categorias (
   id INT(11) NOT NULL AUTO_INCREMENT,
   nombre VARCHAR(100) NOT NULL,
   descripcion VARCHAR(255) DEFAULT NULL,
+  svg_nombre VARCHAR(255) DEFAULT NULL,
   createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
   updatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP NOT NULL,
   PRIMARY KEY(id)
@@ -82,6 +83,7 @@ CREATE TABLE cart_items (
     cart_item_id INT AUTO_INCREMENT PRIMARY KEY,
     cart_id INT,
     menu_id INT,
+    user_id INT,
     cantidad INT NOT NULL,
     added_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
     FOREIGN KEY (cart_id) REFERENCES menu_carts(cart_id) ON DELETE CASCADE,
@@ -102,3 +104,28 @@ CREATE TABLE ventas (
 INSERT INTO ventas (menu_id, user_id, cantidad, precio_total, fecha_venta) VALUES 
 (1, 1, 2, 21.98, '2023-09-14 12:00:00'),
 (2, 2, 3, 26.97, '2023-09-14 12:30:00');
+
+CREATE TABLE Orders (
+    order_id INT AUTO_INCREMENT PRIMARY KEY,
+    table_number INT, -- Número de mesa (si es aplicable)
+    order_date DATE,
+    status ENUM('Pending', 'Preparing', 'Ready', 'Served', 'Paid', 'Cancelled') NOT NULL DEFAULT 'Pending',
+    total_price DECIMAL(10, 2) NOT NULL,
+    special_instructions TEXT, -- Instrucciones especiales para la cocina
+    for_takeout BOOLEAN NOT NULL DEFAULT FALSE, -- Si la orden es para llevar
+    method_payment VARCHAR(255) NOT NULL, -- Método de pago
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
+CREATE TABLE OrderDetails (
+    order_detail_id INT AUTO_INCREMENT PRIMARY KEY,
+    order_id INT NOT NULL,
+    menu_id INT NOT NULL, -- Refiriéndose a la tabla menus
+    quantity INT NOT NULL,
+    item_price DECIMAL(10, 2) NOT NULL, -- Precio por ítem en el momento de la orden
+    notes TEXT, -- Notas para ese ítem específico, por ejemplo, "sin cebolla"
+
+    FOREIGN KEY (order_id) REFERENCES Orders(order_id),
+    FOREIGN KEY (menu_id) REFERENCES menus(id) -- Refiriéndose a la tabla menus
+);
