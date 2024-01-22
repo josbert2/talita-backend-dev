@@ -12,6 +12,7 @@ import Categorias from "./routes/categorias.routes.js";
 import Ventas from "./routes/ventas.routes.js";
 import Cliente from "./routes/cliente.routes.js";
 import Dashboard from "./routes/dashboard.routes.js";
+import Caja from "./routes/caja.routes.js";
 
 
 const app = express();
@@ -33,6 +34,7 @@ app.use("/api", Categorias)
 app.use("/api", Ventas)
 app.use("/api", Cliente)
 app.use("/api", Dashboard)
+app.use("/api", Caja)
 
 
 app.use((req, res, next) => {
