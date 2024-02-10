@@ -28,24 +28,26 @@ export const obtenerResumenTransacciones = async (req, res) => {
 };
 
 export const obtenerCajaAbierta = async (req, res) => {
+    
     try {
         const query = `
             SELECT
-                cr.register_id,
-                cr.opening_balance + COALESCE(SUM(CASE WHEN tr.transaction_type = 'Ingreso' THEN tr.amount ELSE 0 END), 0)
-                - COALESCE(SUM(CASE WHEN tr.transaction_type = 'Egreso' THEN tr.amount ELSE 0 END), 0) AS current_balance,
-                cr.status,
-                cr.opened_at,
-                cr.closed_at,
-                cr.opened_by_user_id,
-                cr.closed_by_user_id
+                c.id AS caja_id,
+                c.nombre,
+                c.saldo_inicial,
+                c.ultima_cuadratura,
+                c.activo,
+                SUM(ci.monto) AS total_ingresos,
+                SUM(ce.monto) AS total_egresos,
+                (c.saldo_inicial + SUM(ci.monto) - SUM(ce.monto)) AS saldo_actual
             FROM
-                cash_registers cr
-            LEFT JOIN transactions tr ON cr.register_id = tr.cash_register_id
+                caja c
+            LEFT JOIN caja_ingreso ci ON c.id = ci.caja_id
+            LEFT JOIN caja_egreso ce ON c.id = ce.caja_id
             WHERE
-                cr.status = 'Opened'
+                c.activo = 1
             GROUP BY
-                cr.register_id;
+                c.id;
         `;
         const [rows] = await pool.query(query);
         if (rows.length === 0) {
@@ -206,8 +208,27 @@ export const realizarCuadraturaCaja = async (req, res) => {
 export const updateCajaTransaccion = async (req, res) => {
     try {
         const { amount } = req.body; // Estos datos deben enviarse en la solicitud
+        const [updateCajaResult] = await pool.query("UPDATE caja SET saldo_inicial = saldo_inicial + ? WHERE activo = 1", [amount]);
+        
+        // Obtener el ID de la caja activa
+        const [activeCaja] = await  pool.query("SELECT * FROM caja WHERE activo = 1");
+
+        if (activeCaja.length === 0) {
+            throw new Error('No hay cajas activas');
+        }
+
+        const cajaId = activeCaja[0].id;
+        const saldoInicial = activeCaja[0].saldo_inicial;
+
     
-        const [rows] = await pool.query("UPDATE caja SET saldo_inicial = saldo_inicial + ? WHERE activo = 1", [amount]);
+
+        const [insertCajaIngresoResult] = await pool.query("INSERT INTO caja_ingreso (caja_id, saldo_inicial, monto) VALUES (?, ?, ?)", [cajaId,  saldoInicial, amount]);
+    
+        return  res.json({ updateCajaResult, insertCajaIngresoResult });
+    
+        
+
+
         res.json(rows);
     
     } catch (err) {
